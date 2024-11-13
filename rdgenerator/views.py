@@ -185,7 +185,8 @@ def generator_view(request):
                     "filename":filename
                 }
             } 
-            #print(data)
+            print(url)
+            print(data)
             headers = {
                 'Accept':  'application/vnd.github+json',
                 'Content-Type': 'application/json',
