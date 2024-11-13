@@ -62,7 +62,7 @@ env:
   SCITER_ARMV7_CMAKE_VERSION: "3.29.7"
   SCITER_NASM_DEBVERSION: "2.14-1"
   LLVM_VERSION: "15.0.6"
-  FLUTTER_VERSION: "3.24.4" # 기존 3.19.6에서 업데이트
+  FLUTTER_VERSION: "3.19.6"
   ANDROID_FLUTTER_VERSION: "3.13.9" # >= 3.16 is very slow on my android phone, but work well on most of others. We may switch to new flutter after changing to texture rendering (I believe it can solve my problem).
   FLUTTER_RUST_BRIDGE_VERSION: "1.80.1"
   # for arm64 linux because official Dart SDK does not work
@@ -140,7 +140,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "5% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "5% complete"}'
 
       - name: Checkout source code
         if: ${{ env.VERSION != 'master' }}
@@ -157,7 +157,7 @@ jobs:
 
       - name: Install ImageMagick on Windows
         run: |
-          choco install -y imagemagick.app --no-progress --force
+          choco install -y imagemagick.app --no-progress
           Get-ChildItem -Path "${env:ProgramFiles}" | % { $_.FullName } | Select-String -Pattern "[\/\\]ImageMagick[^\/\\]*$" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
 
       - name: cargo.toml, runner.rc name, en.rs
@@ -182,8 +182,6 @@ jobs:
           sed -i -e 's|"RustDesk"|"${{ inputs.appname }}"|' ./flutter/windows/runner/Runner.rc
           cp ./src/lang/en.rs ./src/lang/en.rs.bak
           sed -i -e 's|RustDesk|${{ inputs.appname }}|' ./src/lang/en.rs
-          cp ./src/lang/ko.rs ./src/lang/ko.rs.bak
-          sed -i -e 's|RustDesk|${{ inputs.appname }}|' ./src/lang/ko.rs
           sed -i -e 's|Homepage: https://rustdesk.com|Homepage: ${{ fromJson(inputs.extras).urlLink }}|' ./build.py
           sed -i -e "s|launchUrl(Uri.parse('https://rustdesk.com'));|launchUrl(Uri.parse('${{ fromJson(inputs.extras).urlLink }}'));|" ./flutter/lib/common.dart
           sed -i -e "s|launchUrlString('https://rustdesk.com');|launchUrlString('${{ fromJson(inputs.extras).urlLink }}');|" ./flutter/lib/desktop/pages/desktop_setting_page.dart
@@ -205,28 +203,14 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "10% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "10% complete"}'
 
-      - name: Clean Flutter cache
-        run: flutter pub cache repair
-      
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.12.0 #https://github.com/subosito/flutter-action/issues/277
         with:
           channel: "stable"
-          flutter-version: "3.24.4"  # 명시적으로 Flutter 버전 설정
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
-      
-      - name: Install dependencies
-        run: |
-          flutter pub get
-          flutter pub upgrade  # 패키지 의존성 업데이트
-      
-      - name: Clean build cache
-        run: flutter clean
-      
-      - name: Run build_runner
-        run: flutter pub run build_runner build --delete-conflicting-outputs
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@v1
@@ -241,7 +225,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "15% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "15% complete"}'
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -260,7 +244,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "20% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "20% complete"}'
 
       - name: Setup vcpkg with Github Actions binary cache
         uses: lukka/run-vcpkg@v11
@@ -346,7 +330,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "25% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "25% complete"}'
 
       - name: replace flutter icons
         run: |
@@ -360,7 +344,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "30% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "30% complete"}'
 
       # - name: generate rustbridge
       #   run: |
@@ -372,7 +356,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "50% 완료, 이 단계는 약 5분 정도 걸리니 인내심을 가지세요."}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "50% complete, this step takes about 5 minutes, be patient."}'
 
       - name: Build rustdesk
         run: |
@@ -449,7 +433,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "70% 완료, 이 단계는 약 5분 정도 걸리니 인내심을 가져주세요."}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "70% complete, this step takes about 5 minutes, be patient."}'
 
       - name: Sign rustdesk files
         uses: GermanBluefox/code-sign-action@v7
@@ -507,7 +491,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "85% 완료"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "85% complete"}'
 
       - name: Sign rustdesk self-extracted file
         uses: GermanBluefox/code-sign-action@v7
@@ -561,7 +545,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "성공"}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "Success"}'
 
       - name: failed
         if: failure()
@@ -570,7 +554,7 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "생성에 실패했습니다. 다시 시도하세요."}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "Generation failed, try again"}'
 
       - name: failed
         if: cancelled()
@@ -579,4 +563,4 @@ jobs:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"uuid": "${{ inputs.uuid }}", "status": "생성이 취소되었습니다. 다시 시도하세요."}'
+          data: '{"uuid": "${{ inputs.uuid }}", "status": "Generation cancelled, try again"}'
