@@ -198,9 +198,9 @@ def generator_view(request):
             response = requests.post(url, json=data, headers=headers)
             print(response)
             if response.status_code == 204:
-                return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"Starting generator...please wait", 'platform':platform})
+                return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"빌드를 시작합니다...잠시만 기다려 주세요.", 'platform':platform})
             else:
-                return JsonResponse({"error": "Something went wrong"})
+                return JsonResponse({"error": "문제가 발생했습니다."})
     else:
         form = GenerateForm()
     return render(request, 'generator.html', {'form': form})
@@ -248,7 +248,7 @@ def get_png(request):
 def create_github_run(myuuid):
     new_github_run = GithubRun(
         uuid=myuuid,
-        status="Starting generator...please wait"
+        status="빌드를 시작합니다...잠시만 기다려 주세요."
     )
     new_github_run.save()
 
@@ -270,7 +270,7 @@ def resize_and_encode_icon(imagefile):
             img = Image.open(image_buffer)
             imgcopy = img.copy()
     except (IOError, OSError):
-        raise ValueError("Uploaded file is not a valid image format.")
+        raise ValueError("업로드한 파일은 유효한 이미지 형식이 아닙니다.")
 
     # Check if resizing is necessary
     if img.size[0] <= maxWidth:
@@ -351,4 +351,4 @@ def save_custom_client(request):
         for chunk in file.chunks():
             f.write(chunk)
 
-    return HttpResponse("File saved successfully!")
+    return HttpResponse("파일이 성공적으로 저장되었습니다!")
