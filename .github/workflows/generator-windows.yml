@@ -207,12 +207,24 @@ jobs:
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "10% 완료"}'
 
-      - name: Install flutter
-        uses: subosito/flutter-action@v2.12.0 #https://github.com/subosito/flutter-action/issues/277
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: "3.24.4"  # 명시적으로 Flutter 버전 설정
           cache: true
+      
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          flutter pub upgrade  # 패키지 의존성 업데이트
+      
+      - name: Clean build cache
+        run: flutter clean
+      
+      - name: Run build_runner
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@v1
