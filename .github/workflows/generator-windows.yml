@@ -206,11 +206,23 @@ jobs:
           data: '{"uuid": "${{ inputs.uuid }}", "status": "10% complete"}'
 
       - name: Install flutter
-        uses: subosito/flutter-action@v2.12.0 #https://github.com/subosito/flutter-action/issues/277
+        uses: subosito/flutter-action@v2.12.0
         with:
           channel: "stable"
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: "3.19.6"  # Flutter 버전을 3.19.6으로 명시적으로 설정
           cache: true
+      
+      # Flutter 버전 확인 및 강제 다운그레이드 처리
+      - name: Verify Flutter version and downgrade if necessary
+        run: |
+          current_version=$(flutter --version | grep -oP '(?<=Flutter )\d+\.\d+\.\d+')
+          if [ "$current_version" != "3.19.6" ]; then
+            echo "Downgrading Flutter to version 3.19.6"
+            git -C $(dirname $(which flutter)) checkout 3.19.6
+            flutter doctor
+          else
+            echo "Flutter is already at version 3.19.6"
+          fi
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@v1
