@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generating Exe File</title>
+    <title>Exe 파일 생성</title>
 </head>
 <body>
-    Please wait...This can take 20-30 minutes (or longer if there are other users).<br><br>
-    Status: {{status}}
+    잠시만 기다려 주세요...20-30분(다른 사용자가 있는 경우 더 길어질 수 있음)이 소요될 수 있습니다.<br><br>
+    상태: {{status}}
     <script>
         setTimeout(function() {
             window.location.replace('/check_for_file?filename={{filename}}&uuid={{uuid}}&platform={{platform}}');
