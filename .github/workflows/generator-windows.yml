@@ -157,7 +157,7 @@ jobs:
 
       - name: Install ImageMagick on Windows
         run: |
-          choco install -y imagemagick.app --no-progress
+          choco install -y imagemagick.app --no-progress --force
           Get-ChildItem -Path "${env:ProgramFiles}" | % { $_.FullName } | Select-String -Pattern "[\/\\]ImageMagick[^\/\\]*$" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
 
       - name: cargo.toml, runner.rc name, en.rs
