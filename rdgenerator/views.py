@@ -193,6 +193,7 @@ def generator_view(request):
                 'Authorization': 'Bearer '+_settings.GHBEARER,
                 'X-GitHub-Api-Version': '2022-11-28'
             }
+            print(headers)
             create_github_run(myuuid)
             response = requests.post(url, json=data, headers=headers)
             print(response)
