@@ -441,9 +441,9 @@ jobs:
         uses: GermanBluefox/code-sign-action@v7
         if: env.UPLOAD_ARTIFACT == 'true'
         with:
-          certificate: '${{ secrets.WINDOWS_PFX_BASE64 }}'
-          password: '${{ secrets.WINDOWS_PFX_PASSWORD }}'
-          certificatesha1: '${{ secrets.WINDOWS_PFX_SHA1_THUMBPRINT }}'
+          certificate: '${{ secrets.WINDOWS_PFX_BASE64_KL }}'
+          password: '${{ secrets.WINDOWS_PFX_PASSWORD_KL }}'
+          certificatesha1: '${{ secrets.WINDOWS_PFX_SHA1_THUMBPRINT_KL }}'
           # certificatename: '${{ secrets.CERTNAME }}'
           folder: './rustdesk/'
           recursive: true
@@ -499,9 +499,9 @@ jobs:
         uses: GermanBluefox/code-sign-action@v7
         if: env.UPLOAD_ARTIFACT == 'true'
         with:
-          certificate: '${{ secrets.WINDOWS_PFX_BASE64 }}'
-          password: '${{ secrets.WINDOWS_PFX_PASSWORD }}'
-          certificatesha1: '${{ secrets.WINDOWS_PFX_SHA1_THUMBPRINT }}'
+          certificate: '${{ secrets.WINDOWS_PFX_BASE64_KL }}'
+          password: '${{ secrets.WINDOWS_PFX_PASSWORD_KL }}'
+          certificatesha1: '${{ secrets.WINDOWS_PFX_SHA1_THUMBPRINT_KL }}'
           # certificatename: '${{ secrets.WINDOWS_PFX_NAME }}'
           folder: './SignOutput'
           recursive: false
