@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       server:
-        description: 'Rendezvous Server'
+        description: '랑데부 서버'
         required: true
         default: ''
         type: string
       key:
-        description: 'Public Key'
+        description: '공개 키'
         required: true
         default: ''
         type: string
       apiServer:
-        description: 'API Server'
+        description: 'API 서버'
         required: true
         default: ''
         type: string
@@ -24,32 +24,32 @@ on:
         default: ''
         type: string
       uuid:
-        description: "uuid of request"
+        description: "요청 UUID"
         required: true
         default: ''
         type: string
       iconlink:
-        description: "icon link"
+        description: "아이콘 링크"
         required: false
         default: 'false'
         type: string
       logolink:
-        description: "logo link"
+        description: "로고 링크"
         required: false
         default: 'false'
         type: string
       appname:
-        description: "app name"
+        description: "앱 이름"
         required: true
         default: 'rustdesk'
         type: string
       filename:
-        description: "Filename"
+        description: "파일명"
         required: true
         default: 'rustdesk'
         type: string
       extras:
-        description: "extra inputs in json"
+        description: "JSON 추가 입력"
         required: true
         default: '{}'
         type: string
@@ -146,7 +146,7 @@ jobs:
         if: ${{ env.VERSION != 'master' }}
         uses: actions/checkout@v4
         with:
-          repository: rustdesk/rustdesk
+          repository: jkh0kr/rustdesk
           ref: refs/tags/${{ env.VERSION }}
           submodules: recursive
 
@@ -154,7 +154,7 @@ jobs:
         if: ${{ env.VERSION == 'master' }}
         uses: actions/checkout@v4
         with:
-          repository: rustdesk/rustdesk
+          repository: jkh0kr/rustdesk
           submodules: recursive
 
       - name: Restore bridge files
