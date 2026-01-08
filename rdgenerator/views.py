@@ -416,4 +416,4 @@ def save_custom_client(request):
         for chunk in file.chunks():
             f.write(chunk)
 
-    return HttpResponse("File saved successfully!")
+    return HttpResponse("파일이 성공적으로 저장되었습니다!")
